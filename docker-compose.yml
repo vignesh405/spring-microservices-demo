@@ -1,0 +1,111 @@
+version: '3.7'
+
+services:
+ rabbitmq:
+  image: rabbitmq:3.9.1-management
+  mem_limit: 700m
+  ports:
+   - "5672:5672"
+   - "15672:15672"
+  networks:
+   - currency-network
+   
+ currency-exchange:
+  image: vignesh405/spring-microservices-demo-currency-exchange-microservice:0.0.1-SNAPSHOT
+  mem_limit: 700m
+  ports:
+   - "8000:8000"
+  networks:
+   - currency-network
+  depends_on:
+   - service-registry
+   - rabbitmq
+  environment:
+   EUREKA.CLIENT.SERVICEURL.DEFAULTZONE: http://service-registry:8761/eureka
+   SPRING.ZIPKIN.BASEURL: http://zipkin-server:9411
+   RABBIT_URI: amqp://guest:guest@rabbitmq:5672
+   SPRING_RABBITMQ_HOST: rabbitmq
+   SPRING_ZIPKIN_SENDER_TYPE: rabbit
+   
+   
+ limits-service:
+  image: vignesh405/spring-microservices-demo-limits-service-microservice:0.0.1-SNAPSHOT
+  mem_limit: 700m
+  ports:
+   - "7000:7000"
+  networks:
+   - currency-network
+  depends_on:
+   - service-registry
+   - rabbitmq
+  environment:
+   EUREKA.CLIENT.SERVICEURL.DEFAULTZONE: http://service-registry:8761/eureka
+   SPRING.ZIPKIN.BASEURL: http://zipkin-server:9411
+   RABBIT_URI: amqp://guest:guest@rabbitmq:5672
+   SPRING_RABBITMQ_HOST: rabbitmq
+   SPRING_ZIPKIN_SENDER_TYPE: rabbit
+   
+ currency-conversion:
+  image: vignesh405/spring-microservices-demo-currency-conversion-microservice:0.0.1-SNAPSHOT
+  mem_limit: 700m
+  ports:
+   - "8100:8100"
+  networks:
+   - currency-network
+  depends_on:
+   - service-registry
+   - rabbitmq
+  environment:
+   EUREKA.CLIENT.SERVICEURL.DEFAULTZONE: http://service-registry:8761/eureka
+   SPRING.ZIPKIN.BASEURL: http://zipkin-server:9411
+   RABBIT_URI: amqp://guest:guest@rabbitmq:5672
+   SPRING_RABBITMQ_HOST: rabbitmq
+   SPRING_ZIPKIN_SENDER_TYPE: rabbit
+   
+ api-gateway:
+  image: vignesh405/spring-microservices-demo-api-gateway:0.0.1-SNAPSHOT
+  mem_limit: 700m
+  ports:
+   - "8765:8765"
+  networks:
+   - currency-network
+  depends_on:
+   - service-registry
+   - rabbitmq
+  environment:
+   EUREKA.CLIENT.SERVICEURL.DEFAULTZONE: http://service-registry:8761/eureka
+   SPRING.ZIPKIN.BASEURL: http://zipkin-server:9411
+   RABBIT_URI: amqp://guest:guest@rabbitmq:5672
+   SPRING_RABBITMQ_HOST: rabbitmq
+   SPRING_ZIPKIN_SENDER_TYPE: rabbit
+   
+ service-registry:
+  image: vignesh405/spring-microservices-demo-service-registry:0.0.1-SNAPSHOT
+  mem_limit: 700m
+  ports:
+   - "8761:8761"
+  networks:
+   - currency-network
+  environment:
+   RABBIT_URI: amqp://guest:guest@rabbitmq:5672
+   SPRING_RABBITMQ_HOST: rabbitmq
+
+ zipkin-server:
+  image: openzipkin/zipkin:2.23
+  mem_limit: 300m
+  ports:
+   - "9411:9411"
+  networks:
+   - currency-network
+  environment:
+   RABBIT_URI: amqp://guest:guest@rabbitmq:5672
+   SPRING_ZIPKIN_SENDER_TYPE: rabbit
+  depends_on:
+   - rabbitmq
+   
+
+   
+   
+
+networks:
+ currency-network:

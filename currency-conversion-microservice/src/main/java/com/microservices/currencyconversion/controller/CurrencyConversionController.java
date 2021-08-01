@@ -11,13 +11,18 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import com.microservices.currencyconversion.client.CurrencyExchangeProxy;
+import com.microservices.currencyconversion.client.LimitsProxy;
 import com.microservices.currencyconversion.model.CurrencyConversion;
+import com.microservices.currencyconversion.model.Limits;
 
 @RestController
 public class CurrencyConversionController {
 
 	@Autowired
 	private CurrencyExchangeProxy proxy;
+	
+	@Autowired
+	private LimitsProxy limitsProxy;
 	
 	@GetMapping("/currency-conversion/from/{from}/to/{to}/quantity/{quantity}")
 	public CurrencyConversion calculateCurrencyConversion(
@@ -42,7 +47,10 @@ public class CurrencyConversionController {
 			@PathVariable String to,
 			@PathVariable Double quantity) {
 		
-		
+		Limits limits = limitsProxy.retrieveLimits();
+		if(limits.getMinimum()>quantity || limits.getMaximum()<quantity) {
+			throw new RuntimeException("quantity is not within the limits");
+		}
 		CurrencyConversion currencyConversion = proxy.retrieveExchangeValue(from, to);
 		return new CurrencyConversion(currencyConversion.getId(), from, to, currencyConversion.getConversionMultiple(), BigDecimal.valueOf(quantity), BigDecimal.valueOf(quantity*currencyConversion.getConversionMultiple().doubleValue()), currencyConversion.getEnvironment());
 	}

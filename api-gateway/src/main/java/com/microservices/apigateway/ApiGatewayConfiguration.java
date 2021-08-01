@@ -20,10 +20,10 @@ public class ApiGatewayConfiguration {
 		String currencyExchangeInstance = "lb://currency-exchange";
 		//sample route
 		Function<PredicateSpec, Buildable<Route>> routeFunction
-			= p -> p.path("/get")
-					.filters(f -> f.addRequestHeader("MyHeader", "MyURI")
-									.addRequestParameter("MyParam", "MyValue"))
-					.uri("http://httpbin.org:80");
+		= p -> p.path("/get")
+				.filters(f -> f.addRequestHeader("MyHeader", "MyURI")
+								.addRequestParameter("MyParam", "MyValue"))
+				.uri("http://httpbin.org:80");
 		//currency exchange route-custom route, automatic route can be done by the following in application.properties:
 //			spring.cloud.gateway.discovery.locator.enabled=true
 //					spring.cloud.gateway.discovery.locator.lowerCaseServiceId=true
