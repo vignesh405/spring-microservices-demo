@@ -3,12 +3,37 @@ version: '3.7'
 services:
  rabbitmq:
   image: rabbitmq:3.9.1-management
-  mem_limit: 700m
+  mem_limit: 300m
   ports:
    - "5672:5672"
    - "15672:15672"
   networks:
    - currency-network
+ spring-cloud-config-server:
+  image: vignesh405/spring-microservices-demo-spring-cloud-config-server:0.0.1-SNAPSHOT
+  mem_limit: 700m
+  ports:
+   - "8888:8888"
+  networks:
+   - currency-network
+   
+ service-registry:
+  image: vignesh405/spring-microservices-demo-service-registry:0.0.1-SNAPSHOT
+  mem_limit: 700m
+  ports:
+   - "8761:8761"
+  networks:
+   - currency-network
+  depends_on:
+   - spring-cloud-config-server
+   - rabbitmq
+  environment:
+   EUREKA.CLIENT.SERVICEURL.DEFAULTZONE: http://service-registry:8761/eureka
+   SPRING.ZIPKIN.BASEURL: http://zipkin-server:9411
+   RABBIT_URI: amqp://guest:guest@rabbitmq:5672
+   SPRING_RABBITMQ_HOST: rabbitmq
+   SPRING_ZIPKIN_SENDER_TYPE: rabbit
+   SPRING.CONFIG.IMPORT: optional:configserver:http://spring-cloud-config-server:8888
    
  currency-exchange:
   image: vignesh405/spring-microservices-demo-currency-exchange-microservice:0.0.1-SNAPSHOT
@@ -18,6 +43,7 @@ services:
   networks:
    - currency-network
   depends_on:
+   - spring-cloud-config-server
    - service-registry
    - rabbitmq
   environment:
@@ -26,16 +52,18 @@ services:
    RABBIT_URI: amqp://guest:guest@rabbitmq:5672
    SPRING_RABBITMQ_HOST: rabbitmq
    SPRING_ZIPKIN_SENDER_TYPE: rabbit
+   SPRING.CONFIG.IMPORT: optional:configserver:http://spring-cloud-config-server:8888
    
    
- limits-service:
-  image: vignesh405/spring-microservices-demo-limits-service-microservice:0.0.1-SNAPSHOT
+ limits-microservice:
+  image: vignesh405/spring-microservices-demo-limits-microservice:0.0.1-SNAPSHOT
   mem_limit: 700m
   ports:
    - "7000:7000"
   networks:
    - currency-network
   depends_on:
+   - spring-cloud-config-server
    - service-registry
    - rabbitmq
   environment:
@@ -44,6 +72,7 @@ services:
    RABBIT_URI: amqp://guest:guest@rabbitmq:5672
    SPRING_RABBITMQ_HOST: rabbitmq
    SPRING_ZIPKIN_SENDER_TYPE: rabbit
+   SPRING.CONFIG.IMPORT: optional:configserver:http://spring-cloud-config-server:8888
    
  currency-conversion:
   image: vignesh405/spring-microservices-demo-currency-conversion-microservice:0.0.1-SNAPSHOT
@@ -53,6 +82,7 @@ services:
   networks:
    - currency-network
   depends_on:
+   - spring-cloud-config-server
    - service-registry
    - rabbitmq
   environment:
@@ -61,6 +91,7 @@ services:
    RABBIT_URI: amqp://guest:guest@rabbitmq:5672
    SPRING_RABBITMQ_HOST: rabbitmq
    SPRING_ZIPKIN_SENDER_TYPE: rabbit
+   SPRING.CONFIG.IMPORT: optional:configserver:http://spring-cloud-config-server:8888
    
  api-gateway:
   image: vignesh405/spring-microservices-demo-api-gateway:0.0.1-SNAPSHOT
@@ -70,6 +101,7 @@ services:
   networks:
    - currency-network
   depends_on:
+   - spring-cloud-config-server
    - service-registry
    - rabbitmq
   environment:
@@ -77,18 +109,9 @@ services:
    SPRING.ZIPKIN.BASEURL: http://zipkin-server:9411
    RABBIT_URI: amqp://guest:guest@rabbitmq:5672
    SPRING_RABBITMQ_HOST: rabbitmq
-   SPRING_ZIPKIN_SENDER_TYPE: rabbit
-   
- service-registry:
-  image: vignesh405/spring-microservices-demo-service-registry:0.0.1-SNAPSHOT
-  mem_limit: 700m
-  ports:
-   - "8761:8761"
-  networks:
-   - currency-network
-  environment:
-   RABBIT_URI: amqp://guest:guest@rabbitmq:5672
-   SPRING_RABBITMQ_HOST: rabbitmq
+   SPRING_ZIPKIN_SENDER_TYPE: rabbit 
+   SPRING.CONFIG.IMPORT: optional:configserver:http://spring-cloud-config-server:8888   
+ 
 
  zipkin-server:
   image: openzipkin/zipkin:2.23
