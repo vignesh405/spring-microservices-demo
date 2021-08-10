@@ -26,11 +26,9 @@ spec:
       - image: vignesh405/spring-microservices-demo-currency-conversion-microservice:latest
         imagePullPolicy: IfNotPresent
         name: spring-microservices-demo-currency-conversion-microservice
-        env:
-         - name: CURRENCY_EXCHANGE_SERVICE_HOST
-           value: http://currency-exchange
-         - name: LIMITS_MICRO_SERVICE_HOST
-           value: http://limits-micro
+        envFrom:
+         - configMapRef:
+            name: currency-conversion
       restartPolicy: Always
 
 ---
@@ -52,3 +50,14 @@ spec:
     app: currency-conversion
   sessionAffinity: None
   type: LoadBalancer
+  
+---
+
+apiVersion: v1
+data:
+  CURRENCY_EXCHANGE_SERVICE_HOST: http://currency-exchange
+  LIMITS_MICRO_SERVICE_HOST: http://limits-micro
+kind: ConfigMap
+metadata:
+  name: currency-conversion
+  namespace: default
