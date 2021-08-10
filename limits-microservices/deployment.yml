@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "1"
+  labels:
+    app: limits-micro
+  name: limits-micro
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: limits-micro
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: limits-micro
+    spec:
+      containers:
+      - image: vignesh405/spring-microservices-demo-limits-microservice:latest
+        imagePullPolicy: IfNotPresent
+        name: spring-microservices-demo-limits-micro-microservice
+      restartPolicy: Always
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    cloud.google.com/neg: '{"ingress":true}'
+  labels:
+    app: limits-micro
+  name: limits-micro
+  namespace: default
+spec:
+  ports:
+    - port: 7000
+      protocol: TCP
+      targetPort: 7000
+  selector:
+    app: limits-micro
+  sessionAffinity: None
+  type: LoadBalancer

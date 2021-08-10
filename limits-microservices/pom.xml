@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.microservices</groupId>
-	<artifactId>microservices-demo</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>microservices-demo</name>
-	<description>Microservices demo project for Spring Boot</description>
+	<artifactId>limits-microservice</artifactId>
+	<version>0.0.11-SNAPSHOT</version>
+	<name>microservices-demo-kubernetes</name>
+	<description>Limits microservice kubernetes</description>
 	<properties>
 		<java.version>11</java.version>
 		<spring-cloud.version>2020.0.3</spring-cloud.version>
@@ -26,13 +26,9 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-config</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-sleuth</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
@@ -45,6 +41,10 @@
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+		</dependency>-->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-sleuth</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

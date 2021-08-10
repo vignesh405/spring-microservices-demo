@@ -31,12 +31,15 @@ public class CurrencyExchangeController {
 			) {
 		logger.info("retrieveExchangeValue called with {} to {}",from,to);
 		String port = environment.getProperty("local.server.port");
+		
+		String host = environment.getProperty("HOSTNAME");
+		String version = "v11";
 //		CurrencyExchange currencyExchange = new CurrencyExchange(1L,from,to,BigDecimal.valueOf(10));
 		CurrencyExchange currencyExchange = repository.findByFromAndTo(from, to);
 		if(currencyExchange==null) {
 			throw new RuntimeException("Unable to Find data for "+from+" and "+to);
 		}
-		currencyExchange.setEnvironment(port);
+		currencyExchange.setEnvironment(port + " " + version + " " + host);
 		return currencyExchange;
 	}
 }

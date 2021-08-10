@@ -10,9 +10,9 @@
 	</parent>
 	<groupId>com.microservices</groupId>
 	<artifactId>currency-conversion-microservice</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>currency-conversion-microservice</name>
-	<description>Currency conversion microservice</description>
+	<version>0.0.11-SNAPSHOT</version>
+	<name>currency-conversion-microservice-kubernetes</name>
+	<description>Currency conversion microservice using kubernetes</description>
 	<properties>
 		<java.version>11</java.version>
 		<spring-cloud.version>2020.0.3</spring-cloud.version>
@@ -26,26 +26,26 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-config</artifactId>
-		</dependency>
+		</dependency>-->
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-sleuth</artifactId>
 		</dependency>
-		<dependency>
+		<!--  <dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-sleuth-zipkin</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.amqp</groupId>
 			<artifactId>spring-rabbit</artifactId>
-		</dependency>
-		<dependency>
+		</dependency>-->
+		<!-- <dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-		</dependency>
+		</dependency>-->
 		
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>

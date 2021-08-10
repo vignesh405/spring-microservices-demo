@@ -10,9 +10,9 @@
 	</parent>
 	<groupId>com.microservices</groupId>
 	<artifactId>currency-exchange-microservice</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>currency-exchange-microservice</name>
-	<description>Currency exchange microservice</description>
+	<version>0.0.11-SNAPSHOT</version>
+	<name>currency-exchange-microservice-kubernetes</name>
+	<description>Currency exchange microservice kubernetes</description>
 	<properties>
 		<java.version>11</java.version>
 		<spring-cloud.version>2020.0.3</spring-cloud.version>
@@ -42,13 +42,9 @@
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 		</dependency>
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-config</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-sleuth</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
@@ -61,6 +57,10 @@
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+		</dependency>-->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-sleuth</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
