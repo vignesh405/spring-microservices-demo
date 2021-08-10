@@ -26,6 +26,14 @@ spec:
       - image: vignesh405/spring-microservices-demo-currency-exchange-microservice:latest
         imagePullPolicy: IfNotPresent
         name: spring-microservices-demo-currency-exchange-microservice
+        readinessProbe:
+         httpGet:
+          port: 8000
+          path: /actuator/health/readiness
+        livenessProbe:
+         httpGet:
+          port: 8000
+          path: /actuator/health/liveness
       restartPolicy: Always
 
 ---
